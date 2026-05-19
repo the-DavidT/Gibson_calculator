@@ -1,0 +1,10 @@
+.superpowers/
+docs/superpowers/
+.worktrees/
+node_modules/
+out/
+dist/
+dist-electron/
+release/
+coverage/
+.DS_Store
