@@ -6,8 +6,16 @@ interface PrintWorksheetProps {
   reactionName: string
 }
 
+function formatPrintDate(date: Date): string {
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = date.getFullYear()
+
+  return `${day}/${month}/${year}`
+}
+
 export function PrintWorksheet({ result, reactionName }: PrintWorksheetProps): JSX.Element {
-  const date = new Date().toLocaleDateString()
+  const date = formatPrintDate(new Date())
 
   return (
     <section className="print-only print-sheet" aria-label="Printable Gibson worksheet">
@@ -111,7 +119,7 @@ export function PrintWorksheet({ result, reactionName }: PrintWorksheetProps): J
                   <th>Gibson Assembly Mix</th>
                   <td>{formatOneDecimal(result.settings.gibsonMixVolumeUl)} µL</td>
                 </tr>
-                <tr>
+                <tr className="print-total-row">
                   <th>Total reaction</th>
                   <td>{formatOneDecimal(result.totalReactionVolumeUl)} µL</td>
                 </tr>

@@ -151,6 +151,26 @@ describe('calculateGibson', () => {
 
     expect(result.warnings.some((warning) => warning.includes('below 0.5 µL'))).toBe(true)
   })
+
+  it('does not warn when the displayed volume rounds to the pipetting threshold', () => {
+    const result = calculateGibson({
+      settings: defaultReactionSettings,
+      backbones: [{ ...backbone, concentrationNgPerUl: 140 }],
+      inserts: [insert]
+    })
+
+    expect(result.kind).toBe('ok')
+
+    if (result.kind !== 'ok') {
+      throw new Error('Expected valid calculation')
+    }
+
+    const roundedBackboneVolume = formatOneDecimal(result.parts[0].volumeUl)
+
+    expect(result.parts[0].volumeUl).toBeLessThan(defaultReactionSettings.pipettingWarningThresholdUl)
+    expect(roundedBackboneVolume).toBe('0.5')
+    expect(result.warnings.some((warning) => warning.includes('below 0.5 µL'))).toBe(false)
+  })
 })
 
 describe('formatting helpers', () => {

@@ -1,4 +1,4 @@
-import { formatOneDecimal, formatThreeDecimals } from './format'
+import { formatOneDecimal, formatThreeDecimals, roundToOneDecimal } from './format'
 
 export type DnaRole = 'backbone' | 'insert'
 
@@ -226,7 +226,7 @@ function buildWarnings({
   const warnings: string[] = []
 
   parts.forEach((part) => {
-    if (part.volumeUl < settings.pipettingWarningThresholdUl) {
+    if (roundToOneDecimal(part.volumeUl) < settings.pipettingWarningThresholdUl) {
       warnings.push(
         `${part.name} volume is below ${formatOneDecimal(settings.pipettingWarningThresholdUl)} µL.`
       )

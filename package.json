@@ -1,6 +1,6 @@
 {
   "name": "gibson-calculator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Desktop Gibson Assembly reaction calculator",
   "main": "out/main/index.js",
   "private": true,
