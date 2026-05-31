@@ -57,13 +57,14 @@ export default function App(): JSX.Element {
               <FlaskConical size={18} aria-hidden="true" />
               10.0 µL default reaction
             </div>
-            <button type="button" className="primary-button" onClick={handlePrint}>
-              <Printer size={16} aria-hidden="true" />
-              Print worksheet
-            </button>
             <button type="button" className="secondary-button" onClick={handleSavePdf}>
               <FileDown size={16} aria-hidden="true" />
               Save PDF
+            </button>
+            <span className="action-divider" aria-hidden="true" />
+            <button type="button" className="primary-button" onClick={handlePrint}>
+              <Printer size={16} aria-hidden="true" />
+              Print worksheet
             </button>
           </div>
         </header>
@@ -186,7 +187,12 @@ export default function App(): JSX.Element {
 
   function handlePrint(): void {
     if (window.gibsonDesktop) {
-      void window.gibsonDesktop.print()
+      window.gibsonDesktop.print().catch((error: unknown) => {
+        console.error('Print failed', error)
+        window.alert(
+          'Printing failed. Check that a default printer is set and reachable, then try again.'
+        )
+      })
       return
     }
 

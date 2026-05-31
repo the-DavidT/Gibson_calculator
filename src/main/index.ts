@@ -38,8 +38,29 @@ ipcMain.handle('print-current-window', async () => {
     return { ok: false, error: 'No active window to print.' }
   }
 
-  window.webContents.print({ printBackground: true })
-  return { ok: true }
+  // Print the rendered worksheet straight to the default printer in A4. We use
+  // silent (no preview dialog) on purpose: the preview path hangs indefinitely
+  // in this app, while printToPDF (Save PDF) and other apps print to the same
+  // printer fine. Awaiting the callback lets us surface real failures instead of
+  // returning ok before the job is handed off.
+  try {
+    await new Promise<void>((resolve, reject) => {
+      window.webContents.print(
+        { silent: true, printBackground: true, pageSize: 'A4' },
+        (success, failureReason) => {
+          if (!success) {
+            reject(new Error(failureReason))
+            return
+          }
+
+          resolve()
+        }
+      )
+    })
+    return { ok: true }
+  } catch (error) {
+    return { ok: false, error: error instanceof Error ? error.message : String(error) }
+  }
 })
 
 ipcMain.handle('save-current-window-pdf', async () => {
