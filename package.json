@@ -10,6 +10,7 @@
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "build": "npm run test && electron-vite build",
+    "build:web": "npm run test && vite build --config vite.web.config.ts",
     "dist:mac": "npm run build && electron-builder --mac",
     "dist:win": "npm run build && electron-builder --win --x64",
     "dist:win:arm64": "npm run build && electron-builder --win --arm64"
